@@ -39,17 +39,20 @@
     const viz = new carto.Viz(`
       width: 6
       color: ramp($category, vivid)
+      @categories: viewportFeatures($category)
       @categoryHistogram: viewportHistogram($category)
       @numericHistogram: viewportHistogram($amount, 1, 10)
     `);
     const layer = new carto.Layer('layer', source, viz);
 
     layer.addTo(map, 'watername_ocean');
+    layer.on('loaded', function(){
+      // toutes les features
+      console.log(viz.variables.categories.eval());
+      // histogramme
+      console.log(viz.variables.categoryHistogram.eval());
+    });
 
-    setInterval(() => {
-        console.log(viz.variables.categoryHistogram.eval());
-        console.log(viz.variables.numericHistogram.eval());
-    }, 500);
   </script>
 </body>
 </html>
